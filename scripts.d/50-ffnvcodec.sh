@@ -12,7 +12,7 @@ ffbuild_enabled() {
 }
 
 ffbuild_dockerbuild() {
-    if [[ $ADDINS_STR == *4.4* || $ADDINS_STR == *5.0* || $ADDINS_STR == *5.1* ]]; then
+    if [[ $ADDINS_STR == *4.4* || $ADDINS_STR == *5.0* || $ADDINS_STR == *5.1* || $ADDINS_STR == *6.0* ]]; then
         SCRIPT_COMMIT="$SCRIPT_COMMIT2"
     fi
 
