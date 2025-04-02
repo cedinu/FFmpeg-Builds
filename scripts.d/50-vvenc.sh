@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/fraunhoferhhi/vvenc.git"
-SCRIPT_COMMIT="a1996a8c12593c5ce116243bed7a65dd59489a8d"
+SCRIPT_COMMIT="22de8fc9e1f5ab7c4ca1cef6cecf0d9d9e42ca9d"
 
 ffbuild_enabled() {
     [[ $TARGET != *32 ]] || return -1
@@ -19,11 +19,14 @@ ffbuild_dockerbuild() {
         if [[ "$CC" != *clang* ]]; then
             export CFLAGS="$CFLAGS -fpermissive -Wno-error=uninitialized -Wno-error=maybe-uninitialized"
             export CXXFLAGS="$CXXFLAGS -fpermissive -Wno-error=uninitialized -Wno-error=maybe-uninitialized"
+        else
+            export CFLAGS="$CFLAGS -Wno-error=deprecated-literal-operator"
+            export CXXFLAGS="$CXXFLAGS -Wno-error=deprecated-literal-operator"
         fi
     fi
 
     cmake -DCMAKE_TOOLCHAIN_FILE="$FFBUILD_CMAKE_TOOLCHAIN" -DCMAKE_INSTALL_PREFIX="$FFBUILD_PREFIX" -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_SHARED_LIBS=OFF -DEXTRALIBS="-lstdc++" "${armsimd[@]}" ..
+        -DBUILD_SHARED_LIBS=OFF -DVVENC_LIBRARY_ONLY=ON -DVVENC_ENABLE_LINK_TIME_OPT=OFF -DEXTRALIBS="-lstdc++" "${armsimd[@]}" ..
 
     make -j$(nproc)
     make install
